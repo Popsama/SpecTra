@@ -119,16 +119,16 @@ def training_loop(args, dataset, model, criterion1, criterion2):
     unwrapped_model = accelerator.unwrap_model(model)
     accelerator.save(unwrapped_model, "../saved_model/New_model/saved_model_1.pth")
 
-    np.save("../saved_model/New_model/total_loss.npy", np.array(loss_list))
-    np.save("../saved_model/New_model/cla_loss.npy", np.array(classification_loss))
-    np.save("../saved_model/New_model/reg_loss.npy", np.array(regression_loss))
+    np.save("/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/saved_model/New_model/total_loss.npy", np.array(loss_list))
+    np.save("/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/saved_model/New_model/cla_loss.npy", np.array(classification_loss))
+    np.save("/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/saved_model/New_model/reg_loss.npy", np.array(regression_loss))
 
 
 if __name__ == "__main__":
 
     torch.set_default_dtype(torch.float64)
 
-    root_path = r"../../Datasets/Triple_gas/simulated_dataset"
+    root_path = r"/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/Datasets/Triple_gas/simulated_dataset"
 
     save_path1 = root_path + r"/padded_dataset.npy"
     spectraset = np.load(save_path1)
