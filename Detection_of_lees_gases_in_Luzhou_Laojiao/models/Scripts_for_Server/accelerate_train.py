@@ -20,11 +20,15 @@ from accelerate import Accelerator
 def training_loop(args, dataset, model, criterion1, criterion2):
     ####################################################################################################################
 
+    accelerator = Accelerator()
+
     # dataloader
     batch_size = args.batch_size
 
     nw = min([os.cpu_count(), batch_size if batch_size > 1 else 0, 8])  # number of workers
-    print('Using {} dataloader workers every process'.format(nw))
+
+    if accelerator.is_local_main_process:
+        print('Using {} dataloader workers every process'.format(nw))
 
     train_loader = torch.utils.data.DataLoader(dataset=dataset,
                                                batch_size=batch_size,
@@ -38,7 +42,6 @@ def training_loop(args, dataset, model, criterion1, criterion2):
     lf = lambda x: ((1 + math.cos(x * math.pi / args.epochs)) / 2) * (1 - args.lrf) + args.lrf  # cosine
     scheduler = lr_scheduler.LambdaLR(optimizer, lr_lambda=lf)
 
-    accelerator = Accelerator()
     accelerator.print(f'device {str(accelerator.device)} is used!')
     model, optimizer, scheduler, train_dataloader = accelerator.prepare(model,
                                                                         optimizer,
@@ -117,7 +120,7 @@ def training_loop(args, dataset, model, criterion1, criterion2):
         print("Training time:", formatted_duration, "used")
 
     unwrapped_model = accelerator.unwrap_model(model)
-    accelerator.save(unwrapped_model, "../saved_model/New_model/saved_model_1.pth")
+    accelerator.save(unwrapped_model, "/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/saved_model/New_model/saved_model_1.pth")
 
     np.save("/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/saved_model/New_model/total_loss.npy", np.array(loss_list))
     np.save("/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/saved_model/New_model/cla_loss.npy", np.array(classification_loss))
@@ -129,17 +132,22 @@ if __name__ == "__main__":
     torch.set_default_dtype(torch.float64)
 
     root_path = r"/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/Datasets/Triple_gas/simulated_dataset"
+    # root_path = r"/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/Datasets/Triple_gas"
 
     save_path1 = root_path + r"/padded_dataset.npy"
     spectraset = np.load(save_path1)
-    spectraset = spectraset[:, :, np.newaxis]
 
+    spectraset = spectraset[:, :, np.newaxis]  # 之后删掉-1
+
+    print(f"spectraset shpe {spectraset.shape}")
     save_path2 = root_path + r"/masked_dataset_label.npy"
     label = np.load(save_path2)
-
+    print(f"label shpe {label.shape}")
     mask_path = root_path + r"/mask.npy"
     maskset = np.load(mask_path)
 
+    maskset = maskset[:, :]
+    print(f"maskset shpe {maskset.shape}")
 
     train_data_set = MyDataset(spectraset, label, maskset)
 
@@ -173,7 +181,7 @@ if __name__ == "__main__":
     # config
     parser = argparse.ArgumentParser()
     parser.add_argument('--epochs', type=int, default=1)
-    parser.add_argument('--batch-size', type=int, default=64)
+    parser.add_argument('--batch-size', type=int, default=16)
     parser.add_argument('--lr', type=float, default=0.001)
     parser.add_argument('--lrf', type=float, default=0.1)
     opt = parser.parse_args()

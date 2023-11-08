@@ -282,7 +282,7 @@ class Spec_transformer(nn.Module):
 
 
 if __name__ == "__main__":
-
+    import numpy as np
     # 检查GPU可用性
     if torch.cuda.is_available():
         device = torch.device("cuda")
@@ -356,4 +356,26 @@ if __name__ == "__main__":
     pred, weights = spectrans(a.to(device), a_mask.to(device), attention_weights)
     print(pred.shape)
     print(len(weights))
+
+    root_path = r"F:\学习\Database\Luzhou_Lees_gases_detection\Simulated_dataset"
+
+    save_path1 = root_path + r"\padded_dataset.npy"
+    spectraset = np.load(save_path1)
+    print(spectraset.shape)
+
+    save_path2 = root_path + r"\masked_dataset_label.npy"
+    masked_dataset_label = np.load(save_path1)
+    print(masked_dataset_label.shape)
+
+    nu_path = root_path + r"\nu.npy"
+    nu = np.load(save_path1)
+    print(nu.shape)
+
+    mask_path = root_path + r"\mask.npy"
+    mask = np.load(save_path1)
+    print(mask.shape)
+
+    checkpoints_path = root_path + r"\checkpoints.npy"
+    checkpoints = np.load(save_path1)
+    print(checkpoints.shape)
 
