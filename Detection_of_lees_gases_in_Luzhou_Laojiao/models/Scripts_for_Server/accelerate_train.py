@@ -120,8 +120,11 @@ def training_loop(args, dataset, model, criterion1, criterion2):
         print("Training time:", formatted_duration, "used")
 
     unwrapped_model = accelerator.unwrap_model(model)
+
+    ## 一定要用绝对路径
     accelerator.save(unwrapped_model, "/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/saved_model/New_model/saved_model_1.pth")
 
+    ## 一定要用绝对路径
     np.save("/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/saved_model/New_model/total_loss.npy", np.array(loss_list))
     np.save("/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/saved_model/New_model/cla_loss.npy", np.array(classification_loss))
     np.save("/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/saved_model/New_model/reg_loss.npy", np.array(regression_loss))
