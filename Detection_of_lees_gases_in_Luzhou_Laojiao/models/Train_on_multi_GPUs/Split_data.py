@@ -81,9 +81,9 @@ if __name__ == "__main__":
     # label_path = r"D:\PYHTON\python3.7\DeepLearningProgram\科研项目\多组分气体识别与浓度检测\数据集\HITRAN_dataset\实验\甲烷、丙酮、水数据库\数据集\混合气体吸收光谱\label.npy"
     # nu_path = r"D:\PYHTON\python3.7\DeepLearningProgram\科研项目\多组分气体识别与浓度检测\数据集\HITRAN_dataset\实验\甲烷、丙酮、水数据库\数据集\原始数据\波数.npy"
 
-    input_path = r"..\..\Datasets\original_data\input.npy"
-    label_path = r"..\..\Datasets\original_data\label.npy"
-    nu_path = r"..\..\Datasets\original_data\波数.npy"
+    input_path = r"../../Datasets/original_data/input.npy"
+    label_path = r"../../Datasets/original_data/label.npy"
+    nu_path = r"../../Datasets/original_data/波数.npy"
 
 
     blended_spectra = np.load(input_path)  # (10150, 3321)
@@ -145,22 +145,22 @@ if __name__ == "__main__":
     print(checkpointset.shape)
     print(new_label.shape)
 
-    root_path = r"..\..\Datasets\三组分气体生成的数据集\模拟数据集"
+    root_path = r"../../Datasets/三组分气体生成的数据集/模拟数据集"
     # root_path = r"F:\学习\Database\Luzhou_Lees_gases_detection\Simulated_dataset"
 
-    save_path1 = root_path + r"\padded_dataset.npy"
+    save_path1 = root_path + r"/padded_dataset.npy"
     np.save(save_path1, spectraset)
 
-    save_path2 = root_path + r"\masked_dataset_label.npy"
+    save_path2 = root_path + r"/masked_dataset_label.npy"
     np.save(save_path2, new_label)
 
-    nu_path = root_path + r"\nu.npy"
+    nu_path = root_path + r"/nu.npy"
     np.save(nu_path, nu)
 
-    mask_path = root_path + r"\mask.npy"
+    mask_path = root_path + r"/mask.npy"
     np.save(mask_path, maskset)
 
-    checkpoints_path = root_path + r"\checkpoints.npy"
+    checkpoints_path = root_path + r"/checkpoints.npy"
     np.save(checkpoints_path, checkpointset)
 
     print("all data saved!!")

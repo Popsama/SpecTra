@@ -20,6 +20,8 @@ from accelerate import Accelerator
 def training_loop(args, dataset, model, criterion1, criterion2):
     ####################################################################################################################
 
+    accelerator = Accelerator()
+
     # dataloader
     batch_size = args.batch_size
 
@@ -39,7 +41,7 @@ def training_loop(args, dataset, model, criterion1, criterion2):
     lf = lambda x: ((1 + math.cos(x * math.pi / args.epochs)) / 2) * (1 - args.lrf) + args.lrf  # cosine
     scheduler = lr_scheduler.LambdaLR(optimizer, lr_lambda=lf)
 
-    accelerator = Accelerator()
+
     accelerator.print(f'device {str(accelerator.device)} is used!')
     model, optimizer, scheduler, train_dataloader = accelerator.prepare(model,
                                                                         optimizer,
@@ -104,6 +106,9 @@ def training_loop(args, dataset, model, criterion1, criterion2):
         # print logs and save ckpt
         accelerator.wait_for_everyone()
 
+        unwrapped_model = accelerator.unwrap_model(model)
+        accelerator.save(unwrapped_model, "../saved_model/New_model/saved_model_1.pth")
+
     training_end_time = time.time()
     # 计算训练用时（秒数）
     training_duration = training_end_time - training_start_time
@@ -131,8 +136,8 @@ if __name__ == "__main__":
 
     ####################################################################################################################
     # load data
-    root_path = r"../../Datasets/三组分气体生成的数据集/Simulated_dataset"
-    # root_path = r"../../Datasets/三组分气体生成的数据集/模拟数据集"
+    # root_path = r"../../Datasets/三组分气体生成的数据集/Simulated_dataset"
+    root_path = r"../../Datasets/三组分气体生成的数据集/模拟数据集"
 
     save_path1 = root_path + r"/padded_dataset.npy"
     spectraset = np.load(save_path1)
@@ -145,14 +150,7 @@ if __name__ == "__main__":
     maskset = np.load(mask_path)
 
     ####################################################################################################################
-    ## 截取一部分 不然总数太大了
-    spectraset = spectraset[::3, :, :]
-    label = label[::3, :]
-    maskset = maskset[::3, :]
 
-    print(spectraset.shape)
-    print(spectraset.shape)
-    print(spectraset.shape)
 
     train_data_set = MyDataset(spectraset, label, maskset)
 
@@ -185,11 +183,13 @@ if __name__ == "__main__":
 
     # config
     parser = argparse.ArgumentParser()
-    parser.add_argument('--epochs', type=int, default=1)
-    parser.add_argument('--batch-size', type=int, default=16)
+    parser.add_argument('--epochs', type=int, default=5000)
+    parser.add_argument('--batch-size', type=int, default=512)
     parser.add_argument('--lr', type=float, default=0.001)
     parser.add_argument('--lrf', type=float, default=0.1)
     opt = parser.parse_args()
+
+    print(opt)
 
     training_loop(opt, train_data_set, spectrans, criterion1, criterion2)
 
