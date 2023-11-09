@@ -24,7 +24,8 @@ def training_loop(args, dataset, model, criterion1, criterion2):
     batch_size = args.batch_size
 
     nw = min([os.cpu_count(), batch_size if batch_size > 1 else 0, 8])  # number of workers
-    print('Using {} dataloader workers every process'.format(nw))
+    if accelerator.is_local_main_process:
+        print('Using {} dataloader workers every process'.format(nw))
 
     train_loader = torch.utils.data.DataLoader(dataset=dataset,
                                                batch_size=batch_size,
@@ -130,8 +131,8 @@ if __name__ == "__main__":
 
     ####################################################################################################################
     # load data
-    # root_path = r"../../Datasets/三组分气体生成的数据集/Simulated_dataset"
-    root_path = r"../../Datasets/三组分气体生成的数据集/模拟数据集"
+    root_path = r"../../Datasets/三组分气体生成的数据集/Simulated_dataset"
+    # root_path = r"../../Datasets/三组分气体生成的数据集/模拟数据集"
 
     save_path1 = root_path + r"/padded_dataset.npy"
     spectraset = np.load(save_path1)
@@ -144,6 +145,14 @@ if __name__ == "__main__":
     maskset = np.load(mask_path)
 
     ####################################################################################################################
+    ## 截取一部分 不然总数太大了
+    spectraset = spectraset[::3, :, :]
+    label = label[::3, :]
+    maskset = maskset[::3, :]
+
+    print(spectraset.shape)
+    print(spectraset.shape)
+    print(spectraset.shape)
 
     train_data_set = MyDataset(spectraset, label, maskset)
 
@@ -177,7 +186,7 @@ if __name__ == "__main__":
     # config
     parser = argparse.ArgumentParser()
     parser.add_argument('--epochs', type=int, default=1)
-    parser.add_argument('--batch-size', type=int, default=32)
+    parser.add_argument('--batch-size', type=int, default=16)
     parser.add_argument('--lr', type=float, default=0.001)
     parser.add_argument('--lrf', type=float, default=0.1)
     opt = parser.parse_args()
