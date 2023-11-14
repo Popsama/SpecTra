@@ -1,0 +1,30 @@
+wandb_version: 1
+
+attention_size:
+  value: 754
+batch_size:
+  value: 16
+dropout:
+  value: 0.4
+fc1_size:
+  value: 113
+fc2_size:
+  value: 308
+fc3_size:
+  value: 497
+input_size:
+  value: 1
+learning_rate:
+  value: 1.0e-05
+lrf:
+  value: 0.1
+num_layers:
+  value: 5
+output_size:
+  value: 6
+pf_dim:
+  value: 1015
+pre_size:
+  value: 659
+training_epoch:
+  value: 5000

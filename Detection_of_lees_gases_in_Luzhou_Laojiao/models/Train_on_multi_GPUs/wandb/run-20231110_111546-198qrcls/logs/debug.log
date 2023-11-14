@@ -1,0 +1,237 @@
+2023-11-10 11:15:46,655 INFO    MainThread:28356 [wandb_setup.py:_flush():71] setting env: {}
+2023-11-10 11:15:46,656 INFO    MainThread:28356 [wandb_setup.py:_flush():71] setting login settings: {}
+2023-11-10 11:15:46,656 INFO    MainThread:28356 [wandb_init.py:_log_setup():371] Logging user logs to D:\PYHTON\python3.7\DeepLearningProgram\Remote_project\Detection_of_lees_gases_in_Luzhou_Laojiao\models\Train_on_multi_GPUs\wandb\run-20231110_111546-198qrcls\logs\debug.log
+2023-11-10 11:15:46,656 INFO    MainThread:28356 [wandb_init.py:_log_setup():372] Logging internal logs to D:\PYHTON\python3.7\DeepLearningProgram\Remote_project\Detection_of_lees_gases_in_Luzhou_Laojiao\models\Train_on_multi_GPUs\wandb\run-20231110_111546-198qrcls\logs\debug-internal.log
+2023-11-10 11:15:46,657 INFO    MainThread:28356 [wandb_init.py:init():404] calling init triggers
+2023-11-10 11:15:46,657 INFO    MainThread:28356 [wandb_init.py:init():411] wandb.init called with sweep_config: {}
+config: {}
+2023-11-10 11:15:46,657 INFO    MainThread:28356 [wandb_init.py:init():449] starting backend
+2023-11-10 11:15:46,657 INFO    MainThread:28356 [backend.py:_multiprocessing_setup():97] multiprocessing start_methods=spawn, using: spawn
+2023-11-10 11:15:46,683 INFO    MainThread:28356 [backend.py:ensure_launched():199] starting backend process...
+2023-11-10 11:15:46,955 INFO    MainThread:28356 [backend.py:ensure_launched():205] started backend process with pid: 31100
+2023-11-10 11:15:46,956 INFO    MainThread:28356 [wandb_init.py:init():458] backend started and connected
+2023-11-10 11:15:46,956 INFO    MainThread:28356 [wandb_init.py:init():519] updated telemetry
+2023-11-10 11:15:47,026 INFO    MainThread:28356 [wandb_init.py:init():549] communicating current version
+2023-11-10 11:15:49,441 INFO    MainThread:28356 [wandb_init.py:init():554] got version response upgrade_message: "wandb version 0.16.0 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2023-11-10 11:15:49,442 INFO    MainThread:28356 [wandb_init.py:init():564] communicating run to backend with 30 second timeout
+2023-11-10 11:15:50,444 INFO    MainThread:28356 [wandb_init.py:init():592] starting run threads in backend
+2023-11-10 11:15:55,460 INFO    MainThread:28356 [wandb_run.py:_console_start():1816] atexit reg
+2023-11-10 11:15:55,464 INFO    MainThread:28356 [wandb_run.py:_redirect():1690] redirect: SettingsConsole.WRAP
+2023-11-10 11:15:55,465 INFO    MainThread:28356 [wandb_run.py:_redirect():1727] Wrapping output streams.
+2023-11-10 11:15:55,466 INFO    MainThread:28356 [wandb_run.py:_redirect():1751] Redirects installed.
+2023-11-10 11:15:55,466 INFO    MainThread:28356 [wandb_init.py:init():619] run started, returning control to user process
+2023-11-10 11:15:56,662 INFO    MainThread:28356 [pyagent.py:run():320] Starting sweep agent: entity=None, project=None, count=None
+2023-11-10 11:16:01,168 INFO    Thread-16 :28356 [wandb_setup.py:_flush():71] setting env: {'project': 'SpecTra Hyper-parameter tuning', 'entity': '204', 'root_dir': 'D:\\PYHTON\\python3.7\\DeepLearningProgram\\Remote_project\\Detection_of_lees_gases_in_Luzhou_Laojiao\\models\\Train_on_multi_GPUs', 'sweep_id': 'miupwh5j', 'run_id': '2qrphvxo', 'sweep_param_path': 'D:\\PYHTON\\python3.7\\DeepLearningProgram\\Remote_project\\Detection_of_lees_gases_in_Luzhou_Laojiao\\models\\Train_on_multi_GPUs\\wandb\\sweep-miupwh5j\\config-2qrphvxo.yaml'}
+2023-11-10 11:16:01,169 INFO    Thread-16 :28356 [wandb_init.py:_log_setup():371] Logging user logs to D:\PYHTON\python3.7\DeepLearningProgram\Remote_project\Detection_of_lees_gases_in_Luzhou_Laojiao\models\Train_on_multi_GPUs\wandb\run-20231110_111601-2qrphvxo\logs\debug.log
+2023-11-10 11:16:01,169 INFO    Thread-16 :28356 [wandb_init.py:_log_setup():372] Logging internal logs to D:\PYHTON\python3.7\DeepLearningProgram\Remote_project\Detection_of_lees_gases_in_Luzhou_Laojiao\models\Train_on_multi_GPUs\wandb\run-20231110_111601-2qrphvxo\logs\debug-internal.log
+2023-11-10 11:16:01,169 INFO    Thread-16 :28356 [wandb_init.py:init():404] calling init triggers
+2023-11-10 11:16:01,169 INFO    Thread-16 :28356 [wandb_init.py:init():411] wandb.init called with sweep_config: {'attention_size': 416, 'batch_size': 16, 'dropout': 0.3, 'fc1_size': 589, 'fc2_size': 360, 'fc3_size': 342, 'input_size': 1, 'learning_rate': 0.01, 'lrf': 0.1, 'num_layers': 5, 'output_size': 6, 'pf_dim': 937, 'pre_size': 359, 'training_epoch': 5000}
+config: {}
+2023-11-10 11:16:01,170 INFO    Thread-16 :28356 [wandb_init.py:init():446] wandb.init() called when a run is still active
+2023-11-10 11:16:01,170 INFO    Thread-16 :28356 [wandb_run.py:finish():1463] finishing run 204/SpecTra Hyper-parameter tuning/198qrcls
+2023-11-10 11:16:01,170 INFO    Thread-16 :28356 [wandb_run.py:_atexit_cleanup():1786] got exitcode: 1
+2023-11-10 11:16:01,170 INFO    Thread-16 :28356 [wandb_run.py:_restore():1758] restore
+2023-11-10 11:16:07,136 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: None
+2023-11-10 11:16:12,260 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: None
+2023-11-10 11:16:17,371 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: None
+2023-11-10 11:16:22,489 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: None
+2023-11-10 11:16:27,052 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+}
+pusher_stats {
+}
+
+2023-11-10 11:16:27,182 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 1
+}
+pusher_stats {
+  total_bytes: 976
+}
+
+2023-11-10 11:16:28,002 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 1
+}
+pusher_stats {
+  total_bytes: 976
+}
+
+2023-11-10 11:16:28,571 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 4
+}
+pusher_stats {
+  total_bytes: 6078
+}
+
+2023-11-10 11:16:28,687 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:28,797 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 976
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:28,906 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 976
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:29,014 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 976
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:29,124 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 976
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:29,233 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 976
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:29,342 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 976
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:29,449 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 976
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:29,559 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 976
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:29,667 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 976
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:29,776 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 976
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:29,885 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 976
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:29,995 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 1323
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:30,105 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 6105
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:30,213 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 6105
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:30,321 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 6105
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:30,433 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 6105
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:30,543 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 6105
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:30,652 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 6105
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:31,001 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 6105
+  total_bytes: 6105
+}
+
+2023-11-10 11:16:34,216 INFO    Thread-16 :28356 [wandb_run.py:_wait_for_finish():1916] got exit ret: done: true
+exit_result {
+}
+file_counts {
+  wandb_count: 5
+}
+pusher_stats {
+  uploaded_bytes: 6105
+  total_bytes: 6105
+}
+local_info {
+}
+
+2023-11-10 11:16:35,447 INFO    Thread-16 :28356 [wandb_run.py:_append_files():2184] logging synced files

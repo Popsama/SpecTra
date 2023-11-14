@@ -96,7 +96,7 @@ if __name__ == "__main__":
 
     nu = np.load(nu_path)  # (3321,)
 
-    repeat_time = 20
+    repeat_time = 10
 
     maskset = np.zeros((1, blended_spectra.shape[1]))
     spectraset = np.zeros((1, blended_spectra.shape[1]))
@@ -145,8 +145,9 @@ if __name__ == "__main__":
     print(checkpointset.shape)
     print(new_label.shape)
 
-    root_path = r"../../Datasets/三组分气体生成的数据集/模拟数据集"
+    # root_path = r"../../Datasets/三组分气体生成的数据集/模拟数据集"
     # root_path = r"F:\学习\Database\Luzhou_Lees_gases_detection\Simulated_dataset"
+    root_path = r"../../Datasets/三组分气体生成的数据集/Small"
 
     save_path1 = root_path + r"/padded_dataset.npy"
     np.save(save_path1, spectraset)

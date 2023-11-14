@@ -1,0 +1,19 @@
+Create sweep with ID: miupwh5j
+Sweep URL: https://wandb.ai/204/SpecTra%20Hyper-parameter%20tuning/sweeps/miupwh5j
+wandb: WARNING Calling wandb.login() after wandb.init() has no effect.
+wandb: WARNING Calling wandb.login() after wandb.init() has no effect.
+wandb: Agent Starting Run: 2qrphvxo with config:
+wandb: 	attention_size: 416
+wandb: 	batch_size: 16
+wandb: 	dropout: 0.3
+wandb: 	fc1_size: 589
+wandb: 	fc2_size: 360
+wandb: 	fc3_size: 342
+wandb: 	input_size: 1
+wandb: 	learning_rate: 0.01
+wandb: 	lrf: 0.1
+wandb: 	num_layers: 5
+wandb: 	output_size: 6
+wandb: 	pf_dim: 937
+wandb: 	pre_size: 359
+wandb: 	training_epoch: 5000

@@ -1,0 +1,24 @@
+{
+    "os": "Windows-10-10.0.19041-SP0",
+    "python": "3.7.4",
+    "heartbeatAt": "2023-11-10T03:16:52.392486",
+    "startedAt": "2023-11-10T03:16:47.294304",
+    "docker": null,
+    "gpu": "NVIDIA TITAN RTX",
+    "gpu_count": 1,
+    "cpu_count": 16,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "D:\\PYHTON\\python3.7\\DeepLearningProgram\\Remote_project\\Detection_of_lees_gases_in_Luzhou_Laojiao\\models\\Train_on_multi_GPUs\\Train_utils.py",
+    "codePath": "Detection_of_lees_gases_in_Luzhou_Laojiao\\models\\Train_on_multi_GPUs\\Train_utils.py",
+    "git": {
+        "remote": "https://github.com/Popsama/SpecTra.git",
+        "commit": "b1777ad3b9a982cfddabab11d99fceb430df9e53"
+    },
+    "email": "tianlinbodawang@163.com",
+    "root": "D:/PYHTON/python3.7/DeepLearningProgram/Remote_project",
+    "host": "PC-20221012SQAM",
+    "username": "Administrator",
+    "executable": "D:\\PYHTON\\python3.7\\python.exe"
+}
