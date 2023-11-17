@@ -111,6 +111,11 @@ def train(config=None):
 
 if __name__ == "__main__":
 
+    """
+    现在尝试了，num_layer = 4, batch_size = 128, 其他参数设置为2^9，Tesla V100 30GB GPU可以承担。所以上限就是这些数值。
+    在这个基础上 epoch=200试试 sweep parameters
+    """
+
     # torch.set_default_dtype(torch.float64)
 
     # 随机生成数据
@@ -119,7 +124,9 @@ if __name__ == "__main__":
     # root_path = r"../../Datasets/三组分气体生成的数据集/Simulated_dataset"    # Simulated_dataset 大
     # root_path = r"../../Datasets/三组分气体生成的数据集/模拟数据集"              # 模拟数据集小
 
-    root_path = r"../../Datasets/三组分气体生成的数据集/Small"                   # Small 更 小
+    root_path = r"/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/Datasets/Triple_gas/Small"
+    # Small 更 小
+
     save_path1 = root_path + r"/padded_dataset.npy"
     spectraset = np.load(save_path1)
     spectraset = spectraset[:, :, np.newaxis]
@@ -150,7 +157,7 @@ if __name__ == "__main__":
 
         "parameters": {
             "training_epoch": {
-                "value": 50},
+                "value": 200},
 
             'learning_rate': {
                 'distribution': 'uniform',
@@ -158,7 +165,7 @@ if __name__ == "__main__":
                 'max': 0.01
             },
 
-            "batch_size": {"value": 64},
+            "batch_size": {"value": 128},
 
             "input_size": {"value": 1},
 
@@ -166,33 +173,33 @@ if __name__ == "__main__":
 
             "num_layers": {"distribution": "int_uniform",
                            "min": 1,
-                           "max": 5},
+                           "max": 4},
 
             "pre_size": {"distribution": "int_uniform",
                          "min": 4,
-                         "max": 10},
+                         "max": 9},
 
             "attention_size": {"distribution": "int_uniform",
                                "min": 4,
-                               "max": 10},
+                               "max": 9},
 
             "pf_dim": {"distribution": "int_uniform",
                        "min": 4,
-                       "max": 10},
+                       "max": 9},
 
             "dropout": {"values": [0.1, 0.2, 0.3, 0.4]},
 
             "fc1_size": {"distribution": "int_uniform",
                          "min": 7,
-                         "max": 10},
+                         "max": 9},
 
             "fc2_size": {"distribution": "int_uniform",
                          "min": 7,
-                         "max": 10},
+                         "max": 9},
 
             "fc3_size": {"distribution": "int_uniform",
                          "min": 7,
-                         "max": 10},
+                         "max": 9},
 
             "lrf": {"values": [0.1]}
         }
