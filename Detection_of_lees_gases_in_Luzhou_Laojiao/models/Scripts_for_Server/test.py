@@ -11,6 +11,8 @@ import torch.optim.lr_scheduler as lr_scheduler
 from my_dataset import MyDataset
 import wandb
 from tqdm import tqdm
+from hyperopt import hp, fmin, tpe, STATUS_OK, Trials
+
 os.environ["WANDB_API_KEY"] = "1d2e465a78a0ca6fbbbb781c9055c095bb90709b"
 os.environ["WANDB_MODE"] = "offline"
 
@@ -23,39 +25,36 @@ def training(config, dataset):
     print(device)
 
     # 创建模型
-    model = Spec_transformer(config.input_size,
-                             config.output_size,
-                             config.num_layers,
-                             2**config.pre_size,
-                             2**config.attention_size,
-                             2**config.pf_dim,
-                             config.dropout,
-                             2**config.fc1_size,
-                             2**config.fc2_size,
-                             2**config.fc3_size).float().to(device)
+    model = Spec_transformer(config["input_size"],
+                             config["output_size"],
+                             config["num_layers"],
+                             2**config["pre_size"],
+                             2**config["attention_size"],
+                             2**config["pf_dim"],
+                             config["dropout"],
+                             2**config["fc1_size"],
+                             2**config["fc2_size"],
+                             2**config["fc3_size"]).float().to(device)
 
-    # # 查看模型参数的类型
-    # for param in model.parameters():
-    #     print("parameters dtype: {}".format(param.dtype))
 
     # 定义损失函数和优化器
     criterion1 = nn.BCEWithLogitsLoss()
     criterion2 = nn.MSELoss()
 
     # dataloader
-    batch_size = config.batch_size
+    batch_size = config["batch_size"]
 
     train_loader = torch.utils.data.DataLoader(dataset=dataset,
                                                batch_size=batch_size,
                                                shuffle=True)
 
-    optimizer = optim.Adam(model.parameters(), lr=config.learning_rate)
+    optimizer = optim.Adam(model.parameters(), lr=config["learning_rate"])
 
     # Scheduler https://arxiv.org/pdf/1812.01187.pdf
-    lf = lambda x: ((1 + math.cos(x * math.pi / config.training_epoch)) / 2) * (1 - config.lrf) + config.lrf  # cosine
+    lf = lambda x: ((1 + math.cos(x * math.pi / config["training_epoch"])) / 2) * (1 - config["lrf"]) + config["lrf"]
     scheduler = lr_scheduler.LambdaLR(optimizer, lr_lambda=lf)
 
-    for epoch in range(config.training_epoch):
+    for epoch in range(config["training_epoch"]):
 
         model.train()
 
@@ -96,20 +95,32 @@ def training(config, dataset):
 
         scheduler.step()
 
-        # log the mean loss to wandb website
-        wandb.log({"train_loss": mean_loss.item()})
-        wandb.log({"mean_cla_loss": mean_cla_loss.item()})
-        wandb.log({"mean_reg_loss": mean_reg_loss.item()})
+    return mean_loss.item(), mean_cla_loss.item(), mean_reg_loss.item()
 
 
-    # wandb.finish()
+def objective(config):
 
+    print("Current configuration:", config)
 
-def train(config=None):
-    with wandb.init(config=None, project="Remote_server hyper-parameter tuning",
-                    dir="/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/Train_on_multi_GPUs/wandb"):
-        config = wandb.config
-        training(config, train_data_set)
+    # hyperopt会给出索引，我们需要使用索引从提供的取值列表中获取具体的值
+    config['num_layers'] = [1, 2, 3, 4][config['num_layers']]
+    config['pre_size'] = [4, 5, 6, 7, 8, 9][config['pre_size']]
+    config['attention_size'] = [4, 5, 6, 7, 8, 9][config['attention_size']]
+    config['pf_dim'] = [4, 5, 6, 7, 8, 9][config['pf_dim']]
+    config['dropout'] = [0.1, 0.2, 0.3, 0.4][config['dropout']]
+    config['fc1_size'] = [7, 8, 9][config['fc1_size']]
+    config['fc2_size'] = [7, 8, 9][config['fc2_size']]
+    config['fc3_size'] = [7, 8, 9][config['fc3_size']]
+
+    mean_loss, mean_cla_loss, mean_reg_loss = training(config, train_data_set)
+
+    # log the mean loss to wandb website
+    wandb.log({"train_loss": mean_loss})
+    wandb.log({"mean_cla_loss": mean_cla_loss})
+    wandb.log({"mean_reg_loss": mean_reg_loss})
+    wandb.log(**config)
+
+    return {'loss': mean_loss, 'status': STATUS_OK}
 
 
 if __name__ == "__main__":
@@ -150,71 +161,40 @@ if __name__ == "__main__":
 
     ####################################################################################################################
 
-    sweep_config = {
+    # 定义超参数搜索空间
+    space = {
+        # 因为这里是固定值，所以我们不需要对其进行优化
+        'training_epoch': 25,
+        'batch_size': 128,
+        'input_size': 1,
+        'output_size': 6,
+        'lrf': 0.1,
 
-        "method": "bayes",
+        # 对于连续值，我们使用hp.uniform定义范围
+        'learning_rate': hp.uniform('learning_rate', 0.00001, 0.01),
 
-        "metric": {"goal": "minimize",
-                   "name": "train_loss"
-                   },
-
-        "parameters": {
-            "training_epoch": {
-                "value": 200},
-
-            'learning_rate': {
-                'distribution': 'uniform',
-                'min': 0.00001,
-                'max': 0.01
-            },
-
-            "batch_size": {"value": 128},
-
-            "input_size": {"value": 1},
-
-            "output_size": {"value": 6},
-
-            "num_layers": {"distribution": "int_uniform",
-                           "min": 1,
-                           "max": 4},
-
-            "pre_size": {"distribution": "int_uniform",
-                         "min": 4,
-                         "max": 9},
-
-            "attention_size": {"distribution": "int_uniform",
-                               "min": 4,
-                               "max": 9},
-
-            "pf_dim": {"distribution": "int_uniform",
-                       "min": 4,
-                       "max": 9},
-
-            "dropout": {"values": [0.1, 0.2, 0.3, 0.4]},
-
-            "fc1_size": {"distribution": "int_uniform",
-                         "min": 7,
-                         "max": 9},
-
-            "fc2_size": {"distribution": "int_uniform",
-                         "min": 7,
-                         "max": 9},
-
-            "fc3_size": {"distribution": "int_uniform",
-                         "min": 7,
-                         "max": 9},
-
-            "lrf": {"values": [0.1]}
-        }
+        # 对于离散值，我们使用hp.choice
+        'num_layers': hp.choice('num_layers', [0, 1, 2, 3]),
+        'pre_size': hp.choice('pre_size', [0, 1, 2, 3, 4, 5]),
+        'attention_size': hp.choice('attention_size', [0, 1, 2, 3, 4, 5]),
+        'pf_dim': hp.choice('pf_dim', [0, 1, 2, 3, 4, 5]),
+        'dropout': hp.choice('dropout', [0, 1, 2]),
+        'fc1_size': hp.choice('fc1_size', [0, 1, 2]),
+        'fc2_size': hp.choice('fc2_size', [0, 1, 2]),
+        'fc3_size': hp.choice('fc3_size', [0, 1, 2])
     }
 
-    # 创建 wandb sweep
-    sweep_id = wandb.sweep(sweep_config, project="Remote_server hyper-parameter tuning")
 
-    # 运行wandb sweep
-    wandb.agent(sweep_id, train)
 
-    # 放弃使用accelerate 目前没有实现accelerate 与 wandb同步 在多卡上分布式超参数调优
+    # 运行贝叶斯优化
+    best = fmin(
+        fn=objective,
+        space=space,
+        algo=tpe.suggest,
+        max_evals=50
+    )
+
+
 
 
 
