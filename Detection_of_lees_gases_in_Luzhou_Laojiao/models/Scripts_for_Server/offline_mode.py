@@ -12,6 +12,7 @@ from my_dataset import MyDataset
 import wandb
 from tqdm import tqdm
 from hyperopt import hp, fmin, tpe, STATUS_OK, Trials
+import sys
 
 os.environ["WANDB_API_KEY"] = "1d2e465a78a0ca6fbbbb781c9055c095bb90709b"
 os.environ["WANDB_MODE"] = "offline"
@@ -54,6 +55,8 @@ def training(config, dataset):
     lf = lambda x: ((1 + math.cos(x * math.pi / config["training_epoch"])) / 2) * (1 - config["lrf"]) + config["lrf"]
     scheduler = lr_scheduler.LambdaLR(optimizer, lr_lambda=lf)
 
+
+
     for epoch in range(config["training_epoch"]):
 
         model.train()
@@ -62,11 +65,13 @@ def training(config, dataset):
         mean_cla_loss = torch.zeros(1)
         mean_reg_loss = torch.zeros(1)
 
-        optimizer.zero_grad()
+        # optimizer.zero_grad()
 
         progress_bar = tqdm(train_loader, desc='Epoch {:03d}'.format(epoch+1), leave=True, disable=False)
 
         for step, data in enumerate(progress_bar):
+            sys.stdout.flush()  # 清空输出缓冲区
+            optimizer.zero_grad()
 
             weight_list = []
             spectra, labels, masks = data
@@ -89,7 +94,7 @@ def training(config, dataset):
             mean_reg_loss = (mean_reg_loss * step + loss2.detach().cpu().numpy()) / (step + 1)  # update mean losses
 
             optimizer.step()
-            optimizer.zero_grad()
+
 
             progress_bar.set_postfix({'mean_loss': loss.item()})
 
@@ -100,24 +105,44 @@ def training(config, dataset):
 
 def objective(config):
 
+    wandb.init(project="offline-mode",
+               dir="/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/Train_on_multi_GPUs")
+
     # hyperopt会给出索引，我们需要使用索引从提供的取值列表中获取具体的值
-    config['num_layers'] = [1, 2, 3, 4][config['num_layers']]
-    config['pre_size'] = [4, 5, 6, 7, 8, 9][config['pre_size']]
-    config['attention_size'] = [4, 5, 6, 7, 8, 9][config['attention_size']]
-    config['pf_dim'] = [4, 5, 6, 7, 8, 9][config['pf_dim']]
-    config['dropout'] = [0.1, 0.2, 0.3, 0.4][config['dropout']]
-    config['fc1_size'] = [7, 8, 9][config['fc1_size']]
-    config['fc2_size'] = [7, 8, 9][config['fc2_size']]
-    config['fc3_size'] = [7, 8, 9][config['fc3_size']]
+    config["num_layers"] = [1, 2, 3, 4][config["num_layers"]]
+    config["pre_size"] = [4, 5, 6, 7, 8, 9][config["pre_size"]]
+    config["attention_size"] = [4, 5, 6, 7, 8, 9][config["attention_size"]]
+    config["pf_dim"] = [4, 5, 6, 7, 8, 9][config["pf_dim"]]
+    config["dropout"] = [0.1, 0.2, 0.3, 0.4][config["dropout"]]
+    config["fc1_size"] = [7, 8, 9][config["fc1_size"]]
+    config["fc2_size"] = [7, 8, 9][config["fc2_size"]]
+    config["fc3_size"] = [7, 8, 9][config["fc3_size"]]
     # 'lrf' 和其他固定值的参数不需要使用hp.choice，我们直接设置值
-    config['lrf'] = 0.1
+    config["lrf"] = 0.1
+
     mean_loss, mean_cla_loss, mean_reg_loss = training(config, train_data_set)
 
     # log the mean loss to wandb website
     wandb.log({"train_loss": mean_loss})
     wandb.log({"mean_cla_loss": mean_cla_loss})
     wandb.log({"mean_reg_loss": mean_reg_loss})
-    wandb.log(**config)
+
+    wandb.config.update(
+        {
+            "num_layers": config["num_layers"],
+            "pre_size": 2**config["pre_size"],
+            "attention_size": 2**config["attention_size"],
+            "pf_size": 2**config["pf_dim"],
+            "dropout": config["dropout"],
+            "fc1_size": 2**config["fc1_size"],
+            "fc2_size": 2**config["fc2_size"],
+            "fc3_size": 2**config["fc3_size"],
+        },
+        allow_val_change=True
+    )
+
+    # 结束当前的wandb run
+    wandb.finish()
 
     return {'loss': mean_loss, 'status': STATUS_OK}
 
@@ -160,13 +185,10 @@ if __name__ == "__main__":
 
     ####################################################################################################################
 
-    wandb.init(project="offline-mode",
-               dir="/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/Train_on_multi_GPUs")
-
     # 定义超参数搜索空间
     space = {
         # 因为这里是固定值，所以我们不需要对其进行优化
-        'training_epoch': 25,
+        'training_epoch': 1,
         'batch_size': 128,
         'input_size': 1,
         'output_size': 6,
@@ -177,7 +199,7 @@ if __name__ == "__main__":
         # 对于离散值，我们使用hp.choice
         'num_layers': hp.choice('num_layers', [0, 1, 2, 3]),
         'pre_size': hp.choice('pre_size', [0, 1, 2, 3, 4, 5]),
-        'attention_size': hp.choice('attention_size', [0, 1, 2, 3, 4, 5]),
+        "attention_size": hp.choice("attention_size", [0, 1, 2, 3, 4, 5]),
         'pf_dim': hp.choice('pf_dim', [0, 1, 2, 3, 4, 5]),
         'dropout': hp.choice('dropout', [0, 1, 2]),
         'fc1_size': hp.choice('fc1_size', [0, 1, 2]),
@@ -193,10 +215,6 @@ if __name__ == "__main__":
         algo=tpe.suggest,
         max_evals=100
     )
-
-    # 完成W&B记录
-    wandb.finish()
-
 
     # 放弃使用accelerate 目前没有实现accelerate 与 wandb同步 在多卡上分布式超参数调优
 

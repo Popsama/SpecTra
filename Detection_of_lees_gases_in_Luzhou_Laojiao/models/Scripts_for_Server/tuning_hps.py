@@ -11,8 +11,9 @@ import torch.optim.lr_scheduler as lr_scheduler
 from my_dataset import MyDataset
 import wandb
 from tqdm import tqdm
-os.environ["WANDB_API_KEY"] = "1d2e465a78a0ca6fbbbb781c9055c095bb90709b"
-os.environ["WANDB_MODE"] = "offline"
+
+# os.environ["WANDB_API_KEY"] = "1d2e465a78a0ca6fbbbb781c9055c095bb90709b"
+# os.environ["WANDB_MODE"] = "offline"
 
 
 # 训练函数
@@ -160,7 +161,7 @@ if __name__ == "__main__":
 
         "parameters": {
             "training_epoch": {
-                "value": 200},
+                "value": 50},
 
             'learning_rate': {
                 'distribution': 'uniform',

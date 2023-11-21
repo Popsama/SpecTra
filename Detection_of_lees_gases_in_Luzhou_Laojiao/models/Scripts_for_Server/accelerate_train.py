@@ -106,33 +106,45 @@ def training_loop(args, dataset, model, criterion1, criterion2):
         # print logs and save ckpt
         accelerator.wait_for_everyone()
 
-    training_end_time = time.time()
-    # 计算训练用时（秒数）
-    training_duration = training_end_time - training_start_time
-    # 将秒数转换为“天 时 分 秒”格式
-    days, remainder = divmod(training_duration, 86400)
-    hours, remainder = divmod(remainder, 3600)
-    minutes, seconds = divmod(remainder, 60)
-    # 格式化输出
-    formatted_duration = f"{int(days)} day {int(hours)} hour {int(minutes)} min {int(seconds)} sec"
+        unwrapped_model = accelerator.unwrap_model(model)
 
-    if accelerator.is_local_main_process:
-        print("Training time:", formatted_duration, "used")
+        ## 一定要用绝对路径
+        accelerator.save(unwrapped_model,
+                         "/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/saved_model/New_model/saved_model_1.pth")
 
-    unwrapped_model = accelerator.unwrap_model(model)
+        ## 一定要用绝对路径
+        np.save(
+            "/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/saved_model/New_model/total_loss.npy",
+            np.array(loss_list))
+        np.save(
+            "/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/saved_model/New_model/cla_loss.npy",
+            np.array(classification_loss))
+        np.save(
+            "/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/saved_model/New_model/reg_loss.npy",
+            np.array(regression_loss))
 
-    ## 一定要用绝对路径
-    accelerator.save(unwrapped_model, "/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/saved_model/New_model/saved_model_1.pth")
 
-    ## 一定要用绝对路径
-    np.save("/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/saved_model/New_model/total_loss.npy", np.array(loss_list))
-    np.save("/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/saved_model/New_model/cla_loss.npy", np.array(classification_loss))
-    np.save("/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/models/saved_model/New_model/reg_loss.npy", np.array(regression_loss))
+    # training_end_time = time.time()
+    # # 计算训练用时（秒数）
+    # training_duration = training_end_time - training_start_time
+    # # 将秒数转换为“天 时 分 秒”格式
+    # days, remainder = divmod(training_duration, 86400)
+    # hours, remainder = divmod(remainder, 3600)
+    # minutes, seconds = divmod(remainder, 60)
+    # # 格式化输出
+    # formatted_duration = f"{int(days)} day {int(hours)} hour {int(minutes)} min {int(seconds)} sec"
+    #
+    # if accelerator.is_local_main_process:
+    #     print("Training time:", formatted_duration, "used")
 
 
 if __name__ == "__main__":
 
     torch.set_default_dtype(torch.float64)
+
+    # Simulated_dataset 大
+    # root_path = r"../../Datasets/三组分气体生成的数据集/模拟数据集"              # 模拟数据集小
+    # Small 更 小
 
     root_path = r"/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/Datasets/Triple_gas/simulated_dataset"
     # root_path = r"/WORK/sunliq_work/TLB/SpecTra/Detection_of_lees_gases_in_Luzhou_Laojiao/Datasets/Triple_gas"
@@ -157,14 +169,14 @@ if __name__ == "__main__":
     # Instancing model
     input_size = 1
     output_size = 6
-    num_layers = 2  # encoder layer number
-    pre_size = 32
-    attention_size = 128
-    pf_dim = 64
+    num_layers = 4  # encoder layer number
+    pre_size = 2**4
+    attention_size = 2**4
+    pf_dim = 2**8
     dropout = 0.1
-    fc1_size = 196
-    fc2_size = 774
-    fc3_size = 211
+    fc1_size = 2**7
+    fc2_size = 2**8
+    fc3_size = 2**9
 
     spectrans = Spec_transformer(input_size,
                                  output_size,
@@ -183,9 +195,9 @@ if __name__ == "__main__":
 
     # config
     parser = argparse.ArgumentParser()
-    parser.add_argument('--epochs', type=int, default=1)
+    parser.add_argument('--epochs', type=int, default=2000)
     parser.add_argument('--batch-size', type=int, default=16)
-    parser.add_argument('--lr', type=float, default=0.001)
+    parser.add_argument('--lr', type=float, default=0.00353)
     parser.add_argument('--lrf', type=float, default=0.1)
     opt = parser.parse_args()
 
