@@ -196,7 +196,7 @@ if __name__ == "__main__":
     # config
     parser = argparse.ArgumentParser()
     parser.add_argument('--epochs', type=int, default=2000)
-    parser.add_argument('--batch-size', type=int, default=16)
+    parser.add_argument('--batch-size', type=int, default=128)
     parser.add_argument('--lr', type=float, default=0.00353)
     parser.add_argument('--lrf', type=float, default=0.1)
     opt = parser.parse_args()
